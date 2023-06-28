@@ -9,7 +9,7 @@
 - 전략 패턴의 핵심은 `Context`는 `Strategy` 인터페이스에만 의존한다는 점이다.
 
 ### 2. 전략 패턴의 형태와 구성 요소
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/35052d69-269d-4fa1-bc38-82c84224506f/Untitled.png)
+![Untitled (1)](https://github.com/WeeklyStudy/modern-java-in-action/assets/48237976/7288aed9-5456-40c4-b826-d2ccac8c91a3)
 - `전략(stragtegy)` : 여러 알고리즘을 추상화 시킨 **인터페이스**
 - `전략 콘크리트(concrete strategy)` : 알고리즘(어떻게 행동하는지)의 실제 **구현체(클래스)**
 - `전략 사용자(context)` : 전략을 사용하는 프로그램의 흐름
