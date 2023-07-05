@@ -89,8 +89,8 @@ IntelliJ에서 가끔 람다식을 메서드 참조로 바꾸도록 제안하는
 ### Reference
 
 - [[Java] 익명클래스와 Lambda](https://velog.io/@jerry92/Java-%EC%9D%B5%EB%AA%85%ED%81%B4%EB%9E%98%EC%8A%A4%EC%99%80-Lambda)
-- [[심화] 익명 클래스와 람다](https://www.codelatte.io/courses/java_programming_basic/O2PZAC2T82LKBXAY)
-- [[Java] 익명객체(익명클래스)란?](https://limkydev.tistory.com/226)
+- [[심화] 익명 클래스와 람다 *](https://www.codelatte.io/courses/java_programming_basic/O2PZAC2T82LKBXAY)
+- [[Java] 익명객체(익명클래스)란? *](https://limkydev.tistory.com/226)
 
 ## 문제 3
 
