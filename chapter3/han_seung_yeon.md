@@ -36,8 +36,7 @@
 | 정적 메서드 참조 | (x) -> ClassName.staticMethod(x) | ClassName::staticMethod |
 | 한정적 인스턴스 메서드 참조 | (x) -> obj.instanceMethod(x) | obj::instanceMethod |
 | 비한정적 인스턴스 메서드 참조 | (obj, x) -> obj.instanceMethod(x) | ClassName::instanceMethod |
-| 클래스 생성자 | () -> new Object()
-(x) -> new Object(x) | Object::new |
+| 클래스 생성자 | () -> new Object(), (x) -> new Object(x) | Object::new |
 | 배열 생성자 | x -> new int[x] | int[]::new |
 
 ### 1. 정적 메서드 참조 → `클래스::정적 메서드`
