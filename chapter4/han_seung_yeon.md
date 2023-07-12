@@ -216,7 +216,7 @@ public static void t1() {
 }
 ```
 
-- iterate() 람다식이 `n -> (n + 1) % 2` 일 때는 무한 생성됐는데, `n -> n + 1` 일 때는 무한 생성되지 않는 이유는 뭘까?
+- [distinct 와 sorted 의 무한 스트림 생성 예제 실행 결과에 대한 의문점](https://github.com/WeeklyStudy/modern-java-in-action/issues/12#issuecomment-1632432817)
 
 ### 2. 무한 스트림 생성 문제 해결
 
@@ -243,6 +243,6 @@ public static void t2() {
 - 스트림 주의할 점
     - [[Java] 스트림: 지연 연산과 최적화*](https://bugoverdose.github.io/development/stream-lazy-evaluation/)
     - [자바8 Streams API 를 다룰때 실수하기 쉬운것 10가지](https://hamait.tistory.com/547)
-    - [[Effective Java] 아이템 45 : 스트림은 주의해서 사용하라](https://velog.io/@semi-cloud/Effective-Java-%EC%95%84%EC%9D%B4%ED%85%9C-45-%EC%8A%A4%ED%8A%B8%EB%A6%BC%EC%9D%80-%EC%A3%BC%EC%9D%98%ED%95%B4%EC%84%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC)
+    - [[Effective Java] 아이템 45 : 스트림은 주의해서 사용하라*](https://velog.io/@semi-cloud/Effective-Java-%EC%95%84%EC%9D%B4%ED%85%9C-45-%EC%8A%A4%ED%8A%B8%EB%A6%BC%EC%9D%80-%EC%A3%BC%EC%9D%98%ED%95%B4%EC%84%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%9D%BC)
 - stateful 연산
     - [[Java8] Stream API](https://jjingho.tistory.com/146)
