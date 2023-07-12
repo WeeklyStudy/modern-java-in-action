@@ -153,13 +153,10 @@
                 .reduce(0L, Long::sum);
         }
         ```
-        
-- 상태(뮤터블한 데이터)에 대한 의존성
-    - 스트림 API는 상태를 가지지 않는 순수한 함수형 프로그래밍 스타일을 장려한다. 하지만 파이프라이닝을 사용할 때, 중간 연산들이 상태에 의존한다면 예기치 않은 결과를 초래할 수 있습니다. 따라서 파이프라이닝을 사용할 때는 중간 연산들이 불변성과 상태에 대한 의존성을 잘 고려해야 한다.
 
 ### 5. 잘못된 forEach() 사용
 
-- 스트림 패러다임의 핵심은 계산을 일련의 변환으로 재구성 하는 부분이다. 이때 각 변환 단계는 가능한 이전 단계의 결과를 받아 처리하는 **순수 함수(↔side effect 함수)**여야 한다.
+- 스트림 패러다임의 핵심은 계산을 일련의 변환으로 재구성 하는 부분이다. 이때 각 변환 단계는 가능한 이전 단계의 결과를 받아 처리하는 순수 함수(↔side effect 함수)여야 한다.
 - 이펙티브 자바(아이템 46)에 의하면, *forEach 연산은 최종 연산 중 기능이 가장 적고 가장 ‘덜’ 스트림답기 때문에, forEach 연산은 스트림 계산 결과를 보고할 때(주로 print 기능)만 사용하고 계산하는 데는 쓰지 말자*고 권한다.
     - 스트림 패러다임을 이해하지 못한 채 사용하는 forEach() 예시
         
@@ -268,8 +265,8 @@ Lazy Evaluation**은 실제로 필요로 해지는 경우에 연산을 시작**�
             int sum = listOfNumbers.parallelStream().reduce(5, Integer::sum);
             assertThat(sum).isNotEqualTo(15); // true
             ```
-            
-            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/75f888d8-f4c4-4dd6-857b-971751107c45/Untitled.png)
+            <img src="https://github.com/WeeklyStudy/modern-java-in-action/assets/63441091/48ed116e-d9c9-4b48-aaf5-768176764b2b" width="400">
+
             
 - common thread pool
     - common 스레드풀의 스레드 수는 프로세서 코어 수와 같다. 그러나 API를 사용하면 JVM 매개변수를 전달하여 사용할 스레드수를 지정할 수 있다.
@@ -289,5 +286,5 @@ Lazy Evaluation**은 실제로 필요로 해지는 경우에 연산을 시작**�
 
 ### Reference
 
-- https://sas-study.tistory.com/461
+- [자바에서 병렬 스트림을 사용하는 경우](https://sas-study.tistory.com/461)
 - [https://velog.io/@mmy789/Java-스트림과-병렬-처리-1](https://velog.io/@mmy789/Java-%EC%8A%A4%ED%8A%B8%EB%A6%BC%EA%B3%BC-%EB%B3%91%EB%A0%AC-%EC%B2%98%EB%A6%AC-1)
