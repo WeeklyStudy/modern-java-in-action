@@ -234,7 +234,7 @@ Lazy Evaluation**은 실제로 필요해지는 경우에 연산을 시작**하�
     .peek(Data::runOperationB)
     .forEach(Data::runOperationC);
     ```
-    - 두 개의 중간연산 peek과 최종연산 forEach가 하나의 과정(작업 A, B, C)으로 병합된다.
+    - 두 개의 중간연산 peek와 최종연산 forEach가 하나의 과정(작업 A, B, C)으로 병합된다.
     ```java
     List source = List.of(new Data(1), new Data(2), new Data(3)); 
     for (Data data : source) { 
@@ -243,7 +243,7 @@ Lazy Evaluation**은 실제로 필요해지는 경우에 연산을 시작**하�
     data.runOperationC(); 
     }
     ```
-    - 마치 위 코드처럼 작업 A, B, C는 하나의 루프문으로 묶여 처리되고 있다고 이해하면 더 쉽게 이해할 수 있을 것이다.
+    - 작업 병합에 대해 더 쉽게 설명하자면, 위 코드처럼 작업 A, B, C는 하나의 루프문으로 묶여 처리된다고 볼 수 있다.
 - 효과
     - 이를 통해 개별 스트림 요소에 접근하는 횟수가 최소화되기 때문에 스트림 최적화 방법 중 하나로 꼽힌다.
       - 루프퓨전이 적용된 경우 작업 횟수 : 총 3회
@@ -285,7 +285,7 @@ Lazy Evaluation**은 실제로 필요해지는 경우에 연산을 시작**하�
 - 스트림의 작업은 여러 개의 작은 서브 작업으로 분할되고, 스레드 풀의 여러 스레드에서 동시에 병렬적으로 처리된다.
 - 각각의 스레드는 분할된 작업을 독립적으로 실행하고, 작업이 완료되면 그 결과를 결합하여 최종 결과를 얻을 수 있다.
 
-## 3. Fork-Join Framework와 Common Pool of Worker Threads
+### 3. Fork-Join Framework와 Common Pool of Worker Threads
 - **Fork-Join Framework**
     - Fork-Join Framework는 자바의 ForkJoinPool 클래스를 기반으로 동작한다. 
     - 이 프레임워크는 작업을 작은 작업으로 분할하고, 분할된 작업을 병렬적으로 실행하며, 그 결과를 결합하는 방식으로 동작한다.
