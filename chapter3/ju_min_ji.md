@@ -1,15 +1,8 @@
-## 문제 1
-
-람다식을 만든다는 것은 statement를 expression으로 바꾸는 것이다. 즉, 익명함수의 일종인 람다는 익명 클래스를 간결화한 버전이라고 생각된다.
-따라서 람다를 적절한 케이스에 잘 활용하려면 두 방식의 차이를 깊게 이해하는 것부터 시작해야 한다고 생각한다.
-
-람다 표현식과 익명 클래스의 차이점과 장단점이 무엇일까?
-
-## 답변 1
+## Q1. 람다 표현식과 익명 클래스의 차이점과 장단점이 무엇일까?
 
 ### 1. 익명 클래스
 
-코드 내부에 이름이 존재하지 않는 클래스를 만드는 것
+클래스를 정의하면서 동시에 인스턴스를 생성하는 특별한 형태의 클래스로, 코드 내부에 존재하는 이름이 존재하지 않는 클래스다.
 
 - 장점:
     - 다양한 인터페이스 및 메서드 구현
@@ -18,45 +11,60 @@
     - 명시적인 타입 선언
         - 익명 클래스는 명시적으로 타입을 선언함으로써 필요에 따라 가독성을 높일 수 있다.
 - 단점:
-    - 높은 메모리 사용량
-        - 새로운 클래스가 생성되어 메모리 사용량이 증가할 수 있다.
     - 낮은 가독성
         - 코드가 길고 복잡해질 수 있어 가독성이 떨어질 수 있다.
 
 ### 2. 람다 표현식
 
-익명 함수를 간결하게 표현하기 위한 문법적인 기능
+익명 함수를 간결하게 표현하기 위한 문법적인 기능으로, 익명 구현 객체(anonymous implementation object)이다.
 
 - 장점:
-    - 가독성과 간결성
+    - 간결성
+       - 람다 표현식은 주로 함수형 인터페이스와 함께 사용되는데, 이 경우 함수형 인터페이스를 구현하는 익명 클래스의 인스턴스를 생성하지 않고 람다 표현식으로 함수를 정의하여 사용가능하다.
+       - 즉, 클래스 정의 및 인스턴스화하는 코드 작성이 불필요하다.
+        ```java
+        // 인터페이스를 구현하는 익명 클래스 인스턴스화
+       RunSomething runSomething = new RunSomething() { 
+            @Override
+            public int doIt(int number) {
+                return number + 5;
+            }
+        };
+        
+        //  인터페이스를 구현하는 람다 표현식
+        RunSomething lambda = number -> number + 5; 
+        ```       
     - 함수형 프로그래밍 지원
-        - 람다 표현식은 함수형 프로그래밍 개념을 지원하며, 함수를 값으로 다룰 수 있는 장점이 있다.
-        - 함수를 값으로 활용할 수 있다는 장점은 문제에서 언급한 람다의 정의(statement → expression으로의 변화)와 일맥상통한다.
-    - 메모리 절약
-        - 람다 표현식은 익명 클래스에 비해 더 가볍게 작동한다.
-        - 클래스 내에 정의되어 있는 메서드에 접근하고 이를 참조하기 위해서는 객체 초기화가 이루어져야 한다.
-        - 하지만, 람다는 기본적으로 함수형 인터페이스의 구현이므로, 불필요한 클래스 인스턴스 생성을 피할 수 있다. [지연 연산]
+        - 람다 표현식은 함수형 프로그래밍 개념을 지원하며, 함수를 일급 객체로 취급하여 `값`으로 사용 할 수 있다.
+           - 람다 표현식의 기본 문법은 expression style 문법이다. 
+           - 그러나, statement도 return문을 이용하여 람다로 표현할 수 있는데, 이를 block style 문법이라고 한다.
 - 단점:
     - 제약 사항
         - 함수형 인터페이스(하나의 추상 메서드만을 정의하는 인터페이스)에만 사용 가능하다.
-    - 디버깅
-        - 디버깅이 어려울 수 있다.
+#### 💡 함수 vs 메서드
+> - 람다식은 메서드가 아닌 함수의 일종이다. 
+> - 메서드는 클래스에 종속적인 것을 메서드라 하지만, 함수는 어느곳에 종속적이지 않다.
+#### 💡 expression vs statement
+> - expression은  ‘표현식’이라는 뜻으로 하나 이상의 값으로 표현(reduce)될 수 있는 코드를 의미한다.
+> - 핵심은 expression들은 평가(evaluate)가 가능해서 하나의 ‘값’으로 환원되어 function에 argument로 넘길 수 있다.
+> - 반면 statement는 '명령문' 이라는 뜻으로 실행가능한(executable) 최소의 독립적인 코드 조각을 의미한다.
+> - statement도 expression처럼 값으로 넘기는 방법이 있다. return문을 이용하는 것이다.
+> - 정리하자면, return문 없이도 function에 argument로 넘길 수 있는 것은 expression, return문을 통해 expression처럼 값을 넘길 수 있는 것은 statement다.
 
 ### 3. 익명클래스와 람다 표현식 차이점
-
-- **활용**에서의 차이
+- 동작 방식
+    - **익명 클래스**: 익명 클래스는 `컴파일 타임`에 특정 클래스의 하위 클래스로 변환되며, 새로운 클래스 파일이 생성된다. 
+    - **람다 표현식**: `컴파일 타임`에는 람다식 구성 방법(recipe)만 설명(describe)해두고, 실제 구성(construct)은 `런타임`에 위임한다. 람다식 구성 내용은 invokedynamic의 정적 및 동적 인수 목록에 인코딩된다.
+- 활용
    - **익명 클래스**: `부모 클래스를 상속`하거나 `인터페이스를 구현`할 때 사용된다.
-        - 사실 현업에서는 일반적인 클래스를 익명 클래스로 코드를 작성하는 경우는 거의 없고, 별도의 Java 파일을 통해 작성한다고 한다.
-        - 익명 클래스 역시 람다와 마찬가지로 해당 스코프 내에서만 사용되기 때문에 부모 클래스를 상속하는 경우는 주로 추상 클래스를 상속하는 경우다.
-    - **람다 표현식** : `함수형 인터페이스를 구현`할 때만 사용 가능하다.
-- **클래스**와 **함수**로서의 차이
-    - **익명 클래스**: 
-        - `클래스`의 일부로서 멤버 변수와 메서드를 가질 수 있으며, 클래스 내부에서 상태를 유지할 수 있다. 
-        - 따라서, 익명 클래스에서 this는 `인스턴스 자신`을 가리킨다.
-    - **람다 표현식**: 
-        - (멤버 변수를 포함하여) 외부 변수를 캡처하여 사용할 수 있지만, 상태를 유지하는 멤버 변수를 직접 선언할 수는 없다. 람다식은 익명`함수`로, 클래스가 아니기 때문이다. (We can only have members in the class, i.e. variables ( with or without initialization) and methods and initialization blocks.)
-        - 이에 람다식에서 this는 자기 자신이 아닌 `람다식을 실행한 객체`(즉, 외부 인스턴스)를 가리킨다.
-
+        - 현업에서는 일반적인 클래스를 익명 클래스로 코드를 작성하는 경우는 거의 없고, 주로 추상 클래스의 추상 메서드나 인터페이스를 구현할 때 사용되어 별도의 Java 파일을 통해 작성한다고 한다.
+    - **람다 표현식** : `함수형 인터페이스의 구현`을 간결하게 나타내는데 사용된다. 
+- 상태 유지
+   - **익명 클래스**: 클래스의 정의와 함께 인스턴스를 생성하므로, `내부 멤버 변수`와 메서드를 가질 수 있다. 이를 통해 객체의 상태를 유지하고 메서드를 호출하여 다양한 동작을 수행할 수 있다.
+   - **람다 표현식**: `외부 범위의 변수를 캡처`하여 사용할 수 있지만(람다 캡처링), 자체적인 상태를 유지하는 멤버 변수를 직접 선언하고 사용할 수는 없다.
+- this 참조
+    - **익명 클래스**: this는 `익명 내부 클래스 객체`를 가리킨다.
+    - **람다 표현식**: this는 `람다식을 실행한 객체`(즉, 외부 인스턴스)를 가리킨다.
     ```java
    // this 차이에 관한 예제 코드
 
@@ -99,30 +107,34 @@
 >    - 인스턴스 변수 : 인스턴스 별로 독립적으로 유지되는 멤버 변수
 > - 로컬변수 : 메소드가 실행될 때만 사용되는 변수로, 메소드 내부에 선언되어 있다.
 
-
 ### 4. 결론
-- 익명 클래스와 람다 표현식은 모두 익명으로 정의되는 코드 블록이나 함수를 생성하는 방식으로, 일회성이 강하다.
-- 어떤 방식을 선택할지는 상황과 요구 사항에 따라 다르지만, Java 8부터는 람다 표현식이 `함수형 프로그래밍`과 `간결성` 측면에서 더 선호되고 많이 사용되고 있다.
-- 그러나, 함수형 프로그래밍을 지원하는 람다는 `함수형 인터페이스`에는 사용 가능하지만, 그 외 `추상클래스`나 `기타 다른 인터페이스`에서는 람다 사용이 불가능하기 때문에 익명 클래스를 사용해야 한다.
-- 또한, 익명 클래스와 람다 표현식은 각각 `클래스`와 `함수`의 형태를 가지고 있으므로, 클래스와 함수로부터 유래한 특성들(멤버변수 선언 가능여부 등)을 구분하여 이해해야 한다.
+- Java 8 이전에도 존재하던 **익명 클래스**는 `인터페이스`나 `추상 클래스`의 구현체로 사용되며, 일회성 객체를 구현할 때 유용하다.
+- 그러나, Java 8부터는 **람다 표현식**이 `함수형 프로그래밍`과 `간결성` 측면에서 더 선호되고 많이 사용되고 있다.
+- **람다 표현식**은 `함수형 인터페이스`의 구현을 간결하게 나타내는데 사용되며, 외부 변수의 캡처와 함수 전달을 간편하게 처리한다. 이로 인해 함수를 매개변수로 전달하거나 함수를 반환하는 고차 함수의 `인자`로 사용될 때 유용하고, 스트림 API와 함께 사용하여 데이터 처리 `파이프라인`을 구성하는 데도 자주 활용된다.
+- 정리하자면, 함수형 인터페이스에서는 익명 클래스 대신 간결하게 **람다**를 사용할 수 있지만, **익명 클래스** 자리를 람다가 완전히 대체할 수 있는 것은 아니다.
 
 ### Reference
+- 익명 클래스와 람다
+   - [[심화] 익명 클래스와 람다 *](https://www.codelatte.io/courses/java_programming_basic/O2PZAC2T82LKBXAY)
+   - [람다식(feat. 익명 구현 클래스 vs 람다식) *](https://alkhwa-113.tistory.com/entry/%EB%9E%8C%EB%8B%A4%EC%8B%9Dfeat-%EC%9D%B5%EB%AA%85-%EA%B5%AC%ED%98%84-%ED%81%B4%EB%9E%98%EC%8A%A4-vs-%EB%9E%8C%EB%8B%A4%EC%8B%9D)
+   - [자바의 람다식(Lambda Expression), 그 존재의 이유에 대한 깊은 고찰](https://peterdrinker.tistory.com/383)
+   - [[Java] 익명객체(익명클래스)란?](https://limkydev.tistory.com/226)
+   - [[이펙티브 자바 3판] 아이템 42. 익명 클래스보다는 람다를 사용하라](https://madplay.github.io/post/prefer-lambdas-to-anonymous-classes)
+  - [Java 람다의 실체 - 람다 내부 동작 방식](https://ntalbs.github.io/2019/java-lambda/)
+  - [람다식의 처리 과정](https://dreamchaser3.tistory.com/5)
+  - [[StackOverFlow]How will Java lambda functions be compiled?](https://stackoverflow.com/questions/16827262/how-will-java-lambda-functions-be-compiled)
+  - [[StackOverFlow]Is a class being instantiated in a lambda expression?](https://stackoverflow.com/questions/52873659/is-a-class-being-instantiated-in-a-lambda-expression)
+  - [[StackOverFlow] field declaration in anonymous class](https://stackoverflow.com/questions/34333866/statements-in-anonymous-class-declaration)  
+  - [[StackOverFlow] Can Java Lambdas have state?](https://stackoverflow.com/questions/48401216/can-java-lambdas-have-state)
+  - [[StackOverFlow] Is lambda really an object or not?](https://stackoverflow.com/questions/70760212/is-lambda-really-an-object-or-not)
+  - [[StackOverFlow] Java8 Lambdas vs Anonymous classes](https://stackoverflow.com/questions/22637900/java8-lambdas-vs-anonymous-classes)
+- 부가적인 개념
+   - [코드 단위인 Expression과 Statement의 차이를 알아보자](https://shoark7.github.io/programming/knowledge/expression-vs-statement)
+  - [statement vs expression in lambda](https://ezsnote.tistory.com/entry/statements-vs-expressions-%EA%B5%AC%EB%AC%B8-vs-%ED%91%9C%ED%98%84%EC%8B%9D-in-lambda)
+  - [[Java] 변수 구분하기 (클래스변수/ 인스턴스변수/ 지역변수)](https://jishushu.tistory.com/entry/%EB%B3%80%EC%88%98-%EA%B5%AC%EB%B6%84%ED%95%98%EA%B8%B0-%ED%81%B4%EB%9E%98%EC%8A%A4%EB%B3%80%EC%88%98-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4%EB%B3%80%EC%88%98-%EC%A7%80%EC%97%AD%EB%B3%80%EC%88%98)
 
-- [[Java] 익명클래스와 Lambda](https://velog.io/@jerry92/Java-%EC%9D%B5%EB%AA%85%ED%81%B4%EB%9E%98%EC%8A%A4%EC%99%80-Lambda)
-- [자바의 람다식(Lambda Expression), 그 존재의 이유에 대한 깊은 고찰 *](https://peterdrinker.tistory.com/383)
-- [[심화] 익명 클래스와 람다 *](https://www.codelatte.io/courses/java_programming_basic/O2PZAC2T82LKBXAY)
-- [[Java] 익명객체(익명클래스)란? *](https://limkydev.tistory.com/226)
-- [[Java] 변수 구분하기 (클래스변수/ 인스턴스변수/ 지역변수)](https://jishushu.tistory.com/entry/%EB%B3%80%EC%88%98-%EA%B5%AC%EB%B6%84%ED%95%98%EA%B8%B0-%ED%81%B4%EB%9E%98%EC%8A%A4%EB%B3%80%EC%88%98-%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4%EB%B3%80%EC%88%98-%EC%A7%80%EC%97%AD%EB%B3%80%EC%88%98)
-- [[이펙티브 자바 3판] 아이템 42. 익명 클래스보다는 람다를 사용하라](https://madplay.github.io/post/prefer-lambdas-to-anonymous-classes)
-- [[StackOverFlow] field declaration in anonymous class *](https://stackoverflow.com/questions/34333866/statements-in-anonymous-class-declaration)
 
-## 문제 2
-
-IntelliJ에서 가끔 람다식을 메서드 참조로 바꾸도록 제안하는 메시지(`replace lambda with method reference`)를 본적이 있다. 메서드 참조에 대해 잘 모르는 상태에서 추천해주는 대로 람다를 메서드 참조로 바꾼적이 몇 번 있었는데, 앞으로는 왜 사용하는지 정도는 알고 쓰는 것이 좋을 것 같다는 생각이 들었다.
-
-따라서, **메서드 참조를 사용하는 이유(혹은 장점)과** **메서드 참조 유형**에 대해 알아보자.
-
-## 답변 2
+## Q2. 메서드 참조를 사용하는 이유는 무엇이고 메서드 참조 유형에는 무엇이 있을까?
 
 ### 1. 메서드 참조(Method Reference)란?
 
@@ -147,13 +159,7 @@ IntelliJ에서 가끔 람다식을 메서드 참조로 바꾸도록 제안하는
 - [Java 메서드 참조란?](https://develop-writing.tistory.com/136)
 
 
-## 문제 3
-
-지역 변수 사용과 자유 변수에 관련하여 람다 캡처링이라는 용어가 등장하는데 람다 캡처링과 관련된 무엇인지에 대해 궁금증이 생겨 찾아보려고 한다.
-
-람다캡처링이란 무엇인가?
-
-## 답변 3
+## Q3. 람다캡처링이란 무엇인가?
 
 ### 1. 람다 캡처링이란?
 
