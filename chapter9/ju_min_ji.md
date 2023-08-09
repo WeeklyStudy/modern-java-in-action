@@ -29,6 +29,36 @@
 ### 4. 의무 체인 패턴 예제
 
 - [의무 체인 패턴 코드 예제 1 - 주문(order) 프로세스](https://gitlab.com/mskim0ct/tutorial/-/tree/main/src/com/fastcampus/chapter10/chanofresponsibility)
+  - 의무 체인 패턴에서 널리 쓰이는 구조는 아래와 같이 ConcreteHandler 클래스가 하위 클래스들과 공통된 Handler 인터페이스(혹은 추상클래스)를 구현(혹은 상속)하는 것이나, 자바8 이후에는 해당 예제와 같이 하위 클래스로 구현하지 않고 람다식을 통해 코드를 간결하게 작성할 수 있다.
+    - [Java 8 이전] 일반적인 구조
+       <img src="https://github.com/WeeklyStudy/modern-java-in-action/assets/63441091/6be5885b-09cd-471a-a4a5-b32b81af1161" width="300">
+      - Base Handler는 모든 Handler 클래스에 공통적인 상용구 코드를 넣을 수 있는 선택적 클래스이다.
+    - [Java 8] 람다식을 통해 익명함수 선언 및 구현
+       ```java
+       public class Main {
+
+           public static void main(String[] args) {
+               //프로세스 시작
+               OrderProcessStep initializeStep = new OrderProcessStep(order -> {
+                   if (order.getStatus() == OrderStatus.CREATED) {
+                       System.out.println("start processing order " + order.getId());
+                       order.setStatus(OrderStatus.IN_PROGRESS);
+                   }
+               });
+               //총 합을 구함
+               OrderProcessStep setOrderAmountStep = new OrderProcessStep(order -> {
+                   if (order.getStatus() == OrderStatus.IN_PROGRESS) {
+                       System.out.println("Setting amount of order " + order.getId());
+                       order.setAmount(order.getOrderLines().stream()
+                               .map(OrderLine::getAmount)
+                               .reduce(BigDecimal.ZERO, BigDecimal::add));
+                   }
+               }); 
+        ...
+       ```
+  
+  - OrderProcessStep 클래스는 생성자에 Consumer<Order> 인터페이스를 전달하여 작업을 처리하는 기능을 정의하고 있다. 
+  - 이렇게 정의된 Consumer<Order> 인터페이스는 람다 표현식으로 구현되어 해당 클래스를 확장하거나 인터페이스를 구현하지 않고도 객체를 생성하고 작업을 처리할 수 있게 해준다.
 - [의무 체인 패턴 코드 예제 2 - 데이터 정합성을 검증하기 위한 프로세스](https://www.nextree.co.kr/p2533/)
 
 ### 5. 결론
@@ -42,6 +72,7 @@
 - [디자인패턴: Chain of Responsibility를 이용한 디멘션 검증](https://www.nextree.co.kr/p2533/)
 - [디자인 패턴(Design Pattern) : 책임 연쇄 패턴 / 커맨드 패턴](https://www.robotstory.co.kr/raspberry/?mode=view&board_pid=81)
 - [💠 Chain Of Responsibility 패턴 - 완벽 마스터하기](https://inpa.tistory.com/entry/GOF-%F0%9F%92%A0-Chain-Of-Responsibility-%ED%8C%A8%ED%84%B4-%EC%99%84%EB%B2%BD-%EB%A7%88%EC%8A%A4%ED%84%B0%ED%95%98%EA%B8%B0#chain_of_responsibility_pattern)
+- [[Dive Into Design Patterns] Chain of Responsibility](https://refactoring.guru/design-patterns/chain-of-responsibility)
 
 ## Q2.**옵저버 패턴이란?**
 
