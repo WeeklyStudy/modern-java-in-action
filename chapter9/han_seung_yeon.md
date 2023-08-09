@@ -6,7 +6,7 @@
 > 
 
 ## 💡옵저버 패턴 구조
-![Untitled (6)](https://github.com/WeeklyStudy/modern-java-in-action/assets/48237976/459a8a9f-1417-46f4-aa4a-58c5d9b98ffd)
+<img width="500" src="https://github.com/WeeklyStudy/modern-java-in-action/assets/48237976/459a8a9f-1417-46f4-aa4a-58c5d9b98ffd">
 
 
 - `Subject` : 관찰 대상자를 정의하는 인터페이스(상태가 변경되는 대상)
@@ -20,7 +20,7 @@
     - `update()` : `Subject` 의 상태 변화가 감지됐을 때 처리할 동작을 정의한 메서드
 
 ## 💡옵저버 패턴 데이터 전송 방법
-![Untitled (7)](https://github.com/WeeklyStudy/modern-java-in-action/assets/48237976/d0998274-579b-4a6e-96df-278104ed82bb)
+<img width="400" src="https://github.com/WeeklyStudy/modern-java-in-action/assets/48237976/d0998274-579b-4a6e-96df-278104ed82bb">
 
 
 ### 1. push 방식
@@ -34,7 +34,7 @@
 ## 💡옵저버 패턴 예제[[여기](https://flowarc.tistory.com/entry/%EB%94%94%EC%9E%90%EC%9D%B8-%ED%8C%A8%ED%84%B4-%EC%98%B5%EC%A0%80%EB%B2%84-%ED%8C%A8%ED%84%B4Observer-Pattern)]
 
 ### 1. 구조
-![Untitled (9)](https://github.com/WeeklyStudy/modern-java-in-action/assets/48237976/e7162c93-966a-4f78-91c8-2e682343e87f)
+<img width="500" src="https://github.com/WeeklyStudy/modern-java-in-action/assets/48237976/e7162c93-966a-4f78-91c8-2e682343e87f">
 
 - `Publisher` : 발행자들을 묶는 인터페이스
 - `NewsMachine` : 발행자 클래스
@@ -150,7 +150,7 @@
 > 
 
 ## 💡책임 연쇄 패턴 구조
-![img1 daumcdn](https://github.com/WeeklyStudy/modern-java-in-action/assets/48237976/d8ad267e-8e9c-44ee-8cc9-49947cddbe2b)
+<img width="500" src="https://github.com/WeeklyStudy/modern-java-in-action/assets/48237976/d8ad267e-8e9c-44ee-8cc9-49947cddbe2b">
 
 - `Handler` : 요청을 수신하고 처리 객체들의 집합에 전달하는 인터페이스
     - field : 첫번째 핸들러 정보
