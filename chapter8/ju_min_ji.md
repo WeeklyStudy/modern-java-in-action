@@ -3,8 +3,8 @@
 ### 1.  정적 팩토리 메서드 패턴은 팩토리 메서드 패턴과는 다르다.
 
 - 정적 팩토리 메서드 패턴과 팩토리 메서드 패턴은 **팩토리 패턴(객체 생성 역할을 별도의 클래스(Factory)에 위임하는 패턴)의 변형**이다.
-- 하지만, 정적 팩토리 메서드는 [(책) GoF의 디자인 패턴](https://johngrib.github.io/wiki/GoF-Design-Pattern) 책에 나오는 [팩토리 메서드 패턴](https://johngrib.github.io/wiki/pattern/factory-method)과 이름만 비슷할 뿐, **엄연히 다른 패턴이다.**
-- Effective Java 저자 Joshua Bloch도 [(책) GoF의 디자인 패턴](https://johngrib.github.io/wiki/GoF-Design-Pattern) 책에 나온 어떤 패턴과도 맞아 떨어지지 않는다며 주의하라고 한다.
+- 하지만, 정적 팩토리 메서드는 [GoF의 디자인 패턴](https://johngrib.github.io/wiki/GoF-Design-Pattern) 책에 나오는 [팩토리 메서드 패턴](https://johngrib.github.io/wiki/pattern/factory-method)과 이름만 비슷할 뿐, **엄연히 다른 패턴이다.**
+- Effective Java 저자 Joshua Bloch도 정적 팩토리 메서드 패턴은 [GoF의 디자인 패턴](https://johngrib.github.io/wiki/GoF-Design-Pattern) 책에 나온 어떤 패턴과도 맞아 떨어지지 않는다며 주의하라고 한다.
 
 #### 💡  **팩토리 메서드 패턴(Factory Method Pattern)** 
 
@@ -12,46 +12,25 @@
 > 
 > - 정의
 >     - 객체 생성을 위한 인터페이스를 정의하고, **어떤 클래스의 인스턴스를 생성**(`new`)할지에 대한 처리는 **서브클래스가 결정**하는 패턴이다.
-> - 예시 코드
->     - Spring Framework - Bean Factory:
->             
->       ```java
->       public interface BeanFactory {
->             
->       Object getBean(String name) throws BeansException;
->             
->       <T> T getBean(String name, Class<T> requiredType) throws BeansException;
->             
->       Object getBean(String name, Object... args) throws BeansException;
->             
->       <T> T getBean(Class<T> requiredType) throws BeansException;
->             
->       <T> T getBean(Class<T> requiredType, Object... args) throws BeansException;
->                 
->       //...
->       }
->       ```
->             
->       - Spring Framework는 IoC (Inversion of Control) 컨테이너를 통해 객체의 생명주기를 관리하고 의존성 주입(Dependency Injection)을 제공한다.
->       - 각각의 `getBean()`는 **팩토리 메서드**로, 빈의 이름이나 타입이 일치하는 빈을 반환한다.
->       - 그 후, Spring은 ApplicationContext 인터페이스로 BeanFactory를 확장하여 추가 기능들을 추가하여 구성한다.
->         - ApplicationContext 클래스 구현을 통해 빈(Bean)을 생성하는 다양한 팩토리 메서드를 활용하여 애플리케이션의 객체를 생성하고 관리할 수 있다.
->         - 예를 들어, AnnotationConfigApplicationContext를 사용하면 자바 설정 클래스에 @Bean 어노테이션을 사용하여 빈(Bean)을 정의하고, ApplicationContext가 해당 설정 클래스를 읽어 빈을 생성하고 관리하게 된다.
->                 
->         ![image](https://github.com/WeeklyStudy/modern-java-in-action/assets/63441091/77af5ad2-d05d-4199-9919-eae04d400439)
->                 
->     
+> - 사용 예시 - Spring Framework의 Bean Factory:
+>      - Spring Framework는 IoC (Inversion of Control) 컨테이너를 통해 객체의 생명주기를 관리하고 의존성 주입(Dependency Injection)을 제공한다.
+>      - 그 후, Spring은 ApplicationContext 인터페이스로 BeanFactory를 확장하여 추가 기능들을 추가하여 구성한다.
+>          - **ApplicationContext 인터페이스를 구현한 클래스**가 각 스프링 빈의 생성과 관리에 필요한 다양한 **팩토리 메서드**를 제공한다.
+>          - 예를 들어, AnnotationConfigApplicationContext를 사용하면 자바 설정 클래스에 @Bean 어노테이션을 사용하여 빈(Bean)을 정의하고, ApplicationContext가 해당 설정 클래스를 읽어 빈을 생성하고 관리하게 된다.
 
 ### 2.  그렇다면 정적 팩토리 메서드 패턴은 무엇이고, 왜 사용해야 하는가?
 
 - 정의
     - **정적 메서드**로 객체 생성을 **캡슐화**하는 패턴이다. 즉, 객체 생성을 정적 메서드에게 위임하는 것이다.
 - 특징
-    - 일반적으로 정적 팩토리 메서드를 보유한 클래스의 생성자는 `private`으로 선언하여 직접 인스턴스화를 방지하고, `static` 메서드를 통해서만 생성이 가능하다.
-        - 다만 Collection Framework의 정적 팩토리 메서드는 불변 객체를 반환하기 때문에 `private` 생성자가 필요하지 않다.
-    - `static` 이므로 오버라이드가 불가능하다.
-        - JVM 이 메서드를 호출할 때, `instance` 메서드의 경우 런타임 시 해당 메서드를 구현하고 있는 실제 객체를 찾아 호출한다.
-        - 하지만 컴파일러와 JVM 모두 `static` 메서드에 대해서는 실제 객체를 찾는 작업을 시행하지 않기 때문에 `class`(`static`) 메서드의 경우, 컴파일 시점에 선언된 타입의 메서드를 호출한다.
+  - 인스턴스 통제 클래스를 위해서는 생성자의 접근 제어자를  `private`으로 선언하여 직접 인스턴스화(사용자가 `new` 키워드를 사용하여 임의로 객체를 생성)를 방지해야 한다.
+    - 정적 팩토리 메서드 패턴에서 private 생성자를 선언하는 것이 일반적이기는 하나, 클래스는 정적 팩토리 메서드와 public 생성자를 둘 다 제공할 수도 있다. ([A class could provide both public static factory methods and constructors.](https://stackoverflow.com/questions/929021/what-are-static-factory-methods))
+    - Collection Framework에서도 정적 팩토리 메서드와 생성자를 구현 클래스의 public 생성자를 둘 다 제공한다.
+        - Collection Framework의 불변 객체는 주로 정적 팩토리 메서드를 통해 생성하는 것이 권장된다. ([Java 9 has introduced some static factory methods to easily create immutable collections like List, Set and Map](https://javaconceptoftheday.com/java-9-immutable-collections/))
+    - 즉, 생성자의 접근 제어자를 어떻게 설정하느냐에 따라 팩토리 메서드 패턴의 활용이 달라질 수 있는 것이다.
+  - `static` 이므로 오버라이드가 불가능하다.
+       - JVM 이 메서드를 호출할 때, `instance` 메서드의 경우 런타임 시 해당 메서드를 구현하고 있는 실제 객체를 찾아 호출한다.
+       - 하지만 컴파일러와 JVM 모두 `static` 메서드에 대해서는 실제 객체를 찾는 작업을 시행하지 않기 때문에 `class`(`static`) 메서드의 경우, 컴파일 시점에 선언된 타입의 메서드를 호출한다.
 - 장점
     - Effective Java 아이템 중 ***생성자 대신 static factory method**를 사용할 수 없는지 생각해 보라* 라는 내용이 있다.
     - 정적 팩토리 메서드는 생성자가 제공해주지 못하는 장점들을 가져다주기도 한다.
@@ -120,7 +99,7 @@
     - [[StackOverFlow] What are static factory methods?](https://stackoverflow.com/questions/929021/what-are-static-factory-methods)
     - [Spring - bean 주입과 static 메서드](https://codemanager.tistory.com/1)
 - 오브젝트 풀링
-    - [Object Pool, 오브젝트 풀, 객체 풀 [디자인패턴](최적화)](https://luv-n-interest.tistory.com/1116)
+    - [[디자인패턴] Object Pool, 오브젝트 풀, 객체 풀 (최적화)](https://luv-n-interest.tistory.com/1116)
 - 정적 메서드
     - [[JAVA] 정적 메소드를 오버라이드 하지 못하는 이유](https://hsik0225.github.io/java/2020/12/17/Static-Override/)
 
