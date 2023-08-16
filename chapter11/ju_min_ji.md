@@ -2,28 +2,27 @@
 
 ### 1. Optional이란?
 
-- Optional<T> 클래스는 Integer나 Double 클래스처럼 'T'타입의 객체를 포장해 주는 래퍼 클래스(Wrapper class)이다.
-- Integer, Double 클래스 등이 Primitive Type을 감싸기 위한 클래스라면, Optionl은 Null이 될 수 있는 값을 감싸는 클래스이다.
+- Optional<T> 클래스는 Integer나 Double 클래스처럼 'T'타입의 객체를 포장해 주는 **래퍼 클래스(Wrapper class)** 이다.
+- Integer, Double 클래스 등이 Primitive Type을 감싸기 위한 클래스라면, Optionl은 **Null이 될 수 있는 값을 감싸는 클래스**이다.
 
 ### 2. Optional 도입 배경
 
 - 변수값에 null이 들어오거나, 이로 인해 NullPointerException이 발생할 수 있는 상황에서 null 처리하는 방법을 개선하고 가독성을 높이기 위한 도구로 도입되었다
-- **Optional의 역할**은 더욱 명확한 **메서드 시그니처**를 통해 더 **이해하기 쉬운 API를 설계**하도록 돕는 것이다.
+- Optional의 역할은 더욱 **명확한 메서드 시그니처**를 통해 더 **이해하기 쉬운 API를 설계**하도록 돕는 것이다.
 
-> 💡 **NPE(NullPointerException)를 조심해야 하는 이유**
+#### 💡 NPE(NullPointerException)를 조심해야 하는 이유
 > 
-> 
->  null을 반환한 근본적인 부분에서 예외가 발생하는 것이 아니라, **원인과 상관 없는 부분에서** 그 값을 사용하려할 때 예외가 발생하기 때문에 **발생 지점을 추적하기 번거롭다**.
+>  null을 반환한 근본적인 부분에서 예외가 발생하는 것이 아니라, **원인과 상관 없는 부분에서** 그 값을 사용하려할 때 예외가 발생하기 때문에, **발생 지점을 추적하기 번거롭다**.
 > 
 
 ### 3. Optional 장점
 
-- null의 의미론적인 모호함 제거 **→ 가독성**을 ****향상시킬 수 있다.
+- null의 의미론적인 모호함 제거 → **가독성**을 향상시킬 수 있다.
     - `Optional.empty()`: 값이 없다.
-    - `Optional.of(value)`: 값이 존재한다. (null이 들어오면 NullPointerException을 던진다.)
-    - `Optional.ofNullable(value)`: 값이 존재할 수 있다. (null이 들어오면 빈 옵셔널을 생성한다.)
+    - `Optional.of(value)`: 값이 존재한다. (**null이 들어오면 NullPointerException을 던진다.**)
+    - `Optional.ofNullable(value)`: 값이 존재할 수 있다. (**null이 들어오면 빈 옵셔널을 생성한다.**)
 - **상황에 맞는 예외**를 던질 수 있다.
-    - `Optional.orElseThrow()` 메서드: Optional이 비어있을 때 예외를 발생시킨다는 점에서 get 메서드와 비슷하지만 이 메서드는 ****발생시킬 예외 종류를 선택할 수 있다.
+    - `Optional.orElseThrow()` 메서드: Optional이 비어있을 때 예외를 발생시킨다는 점에서 get 메서드와 비슷하지만 이 메서드는 발생시킬 예외 종류를 선택할 수 있다.
 - **메서드 체이닝**을 통해 연속적인 작업을 수행하기 용이하다.
     
     ```java
@@ -39,8 +38,8 @@
 
 ### 4. Optional 단점
 
-- NullPointerException 대신 **NoSuchElementException**가 발생할 수 있다.
-    - Null-Safe하기 위해 Optional을 사용하였는데, 값의 존재 여부를 판단하지 않고 접근한다면  NoSuchElementException을 발생시키기 때문에 중첩된 null 체크와 크게 다르지 않다.
+- NullPointerException 대신 NoSuchElementException가 발생할 수 있다.
+    - Null-Safe하기 위해 Optional을 사용하였는데, **값의 존재 여부를 판단하지 않고 접근한다면**, NoSuchElementException을 발생시키기 때문에 중첩된 null 체크와 크게 다르지 않다.
         - `Optional.get()` : 값이 없으면 NoSuchElementException을 발생시킨다.
 - 도메인 모델에 Optional을 사용했을 때 데이터를 **직렬화**할 수 없다.
     - 직렬화 모델이 필요하다면 아래 코드처럼 인스턴스 필드에 Optional<T>로 선언하는 대신, **Optional로 값을 반환받을 수 있는 메서드**를 추가하는 방식을 권장된다.
@@ -58,8 +57,8 @@
 
 ### 5. Optional 사용법 가이드
 
-- Optional 변수에 null을 할당하지 말자.
-- 단순히 값을 얻으려는 목적으로만 Optional을 사용하지 말자.
+1. Optional 변수에 null을 할당하지 말자.
+2. 단순히 값을 얻으려는 목적으로만 Optional을 사용하지 말자.
     - 단순히 값을 얻는 경우에는 삼항 연산자를 이용하는 것이 낫다.
         
         ```java
@@ -80,7 +79,7 @@
         }
         ```
         
-- 값이 없으면 `orElseThrow()`를 통해 java.util.NoSuchElementException 예외를 발생시키자.
+3. 값이 없으면 `orElseThrow()`를 통해 java.util.NoSuchElementException 예외를 발생시키자.
     
     ```java
     // AVOID
@@ -104,16 +103,16 @@
     }
     ```
     
-- 생성자, 수정자, 메소드 파라미터 등으로 Optional을 넘기지 말자.
+4. 생성자, 수정자, 메소드 파라미터 등으로 Optional을 넘기지 말자.
     - 넘겨온 파라미터를 위해 자체 null체크도 추가로 해주어야 하고, 코드도 복잡해지는 등 상당히 번거로워지기 때문에 반환값으로만 사용하는 것이 권장된다.
-- Collection의 경우 Optional이 아닌 빈 Collection을 사용하자.
+5. Collection의 경우 Optional이 아닌 빈 Collection을 사용하자.
     - 굳이 Optional로 감싸지 말고 빈 컬렉션을 사용하는 것이 가볍고, 깔끔하게 처리할 수 있다.
 
 ### 6. 결론
 
 - Optional은 **반환 타입**으로써, **에러가 발생할 수 있는 경우에 결과 없음을 명확히 드러내기 위해** 만들어졌으며, Stream API와 결합되어 유연한 **체이닝 api**를 만들기 위해 탄생한 것이다.
 - Optional을 잘못 사용하는 것은 비용은 증가시키는 반면에 코드 품질은 오히려 악화시킨다. 특히, **성능**이 중요한 상황에서는 옵셔널 사용이 맞지 않을 수 있다.
-- 따라서, **결과가 없을 수 있으며**, 클라이언트가 이 상황을 **특별하게 처리**(특수한 동작, 기본값 설정, 예외 처리 등)해야하는 경우에만 Optional을 **반환**하게 해야 한다.
+- 따라서 **결과가 없을 수 있으며**, 클라이언트가 이 상황을 **특별하게 처리**(특수한 동작, 기본값 설정, 예외 처리 등)해야하는 경우에만 Optional을 **반환**하게 해야 한다.
 
 ### References
 
@@ -128,7 +127,7 @@
 
 ### 1. orElse()와 orElseGet() 차이
 
-- `orElse()`와 `orElseGet()`은 둘 다 ****, 값이 없을 경우 Optional 객체에서 값을 가져오는 메서드이지만, 상황에 맞게 적합한 메서드를 올바르게 사용해야 한다.
+- `orElse()`와 `orElseGet()`은 둘 다 Optional 객체에서 값을 가져와 기본값을 설정하는 메서드이지만, 상황에 맞게 적합한 메서드를 올바르게 사용해야 한다.
 
 ```java
 /**
@@ -159,17 +158,19 @@ public T orElseGet(Supplier<? extends T> other) {
 
 - `orElse()` :
     - 메서드 시그니처: `T orElse(T other)`
-    - Optional이 값을 포함하지 않을 때 기본값 제공하는 메서드이다.
-    - 이미 준비되어 있는 값을 사용하기 때문에, 주로 객체가 비어있어도 상관없는 기본값이나 상수를 제공할 때 사용된다.
+    - Optional 객체가 값을 포함하지 않을 때, **기본값**을 제공하는 메서드이다.
+    - 주로 **객체가 비어있어도 상관없는 기본값**이나 **상수** 등을 제공할 때 사용된다.
 - `orElseGet()` :
     - 메서드 시그니처:  `T orElseGet(Supplier<? extends T> supplier)`
-    - 런타임에 고정되지 않는 값을 지연 로딩(Lazy Loading)할 수 있다.
-    - `Optional` 객체가 비어있을 때 기본값을 생성하는 람다 표현식(`Supplier`)을 제공한다.
+    - orElse와 달리 런타임에 동적으로 생성되는 값을 지연 로딩(Lazy Loading)할 수 있는 메서드이다.
+    - Optional 객체가 값을 포함하지 않을 때, **기본값을 생성하는 람다 표현식(Supplier)** 을 제공한다.
+    - Supplier는 값을 제공하는 함수형 인터페이스로, 메서드에 전달된 람다 표현식이나 메서드 참조가 Supplier의 get() 메서드를 구현하게 된다.
+
 
 ### 2. orElse() 주의점
 
 - `orElse()`와 `orElseGet()`은 null이든 아니든 모두 인자로 받은 값들을 호출한다.
-- 그러나, `orElse()` 는 **항상 인자로 전달된 값을 평가(evaluate, 계산)**하기 때문에, `orElse()`의 인자로 메서드가 전달되면 인자로 가지면 불필요한 연산을 수행하거나 예외를 발생시킬 수 있다.
+- 그러나, `orElse()` 는 **항상 인자로 전달된 값을 평가(evaluate, 계산)** 하기 때문에, `orElse()`의 인자로 메서드가 전달되면 인자로 가지면 불필요한 연산을 수행하거나 예외를 발생시킬 수 있다.
 - 반면, `orElseGet()` 은 **Optional이 비어있을 때에만 람다식이 평가**되므로 불필요한 연산을 피하고 안전하게 사용할 수 있다.
 - 예외가 발생할 수 있는 코드 예제 - `orElse()`
     
@@ -203,16 +204,16 @@ public T orElseGet(Supplier<? extends T> other) {
 ### 3. **Optional의 orElse() vs orElseGet() 용도**
 
 - 단순 기본 값일 때는 `orElse()` 를 사용하는 것이 적합하고, 이 외에 비용이 큰 연산이나 동적인 생성이 필요한 경우에`orElseGet()`을 사용하면 효율적으로 사용할 수 있다.
-    - 특히, JPA 등을 사용하여 Entity가 변경이 되는 부분이 캡슐화되면 찾기가 어렵기 때문에 잘 구별해서 사용해야 겠다.
+- **특히, JPA 등을 사용하여 Entity가 변경이 되는 부분이 캡슐화되면 찾기가 어렵기 때문에, 행위에 대한 메서드를 사용할 때에는 `orElse()`를 신중하게 사용해야 한다.**
 
-### Reference
+### References
 
-- https://giron.tistory.com/153
-- https://ysjune.github.io/posts/java/orelsenorelseget/
+- [Optional.orElse() vs .orElseGet()](https://giron.tistory.com/153)
+- [orElse 와 orElseGet 무슨 차이가 있을까?](https://ysjune.github.io/posts/java/orelsenorelseget/)
 
 ## Q3. **자바의 직렬화(Serialization)와 Serializable 인터페이스는 무엇일까?**
 
-### 1. 자바의 직렬화**(Serialization)**
+### 1. 자바의 직렬화(Serialization)
 
 - 목적:
     - 자바 시스템 내부에서 사용되는 Object 또는 Data를 **외부의 자바 시스템에서도 사용할 수 있도록**
@@ -324,7 +325,7 @@ public interface Serializable {
 ### 5. 결론
 
 - 자바 직렬화는 이진 형태로 변환하여 저장하거나 네트워크를 통해 전송하여 협업하는 데에 쓰일 수 있지만, 보안 및 버전 관리 측면에서 문제가 될 수 있으며, 클래스 구조 변경 시 호환성 문제가 발생할 수 있다.
-- **자주 변경되는 비즈니스적인 데이터는 자바 직렬화를 사용하지 않는 것**이 권장되며**,** 외부 저장소로 저장되는 데이터(ex. Redis)는 짧은 만료시간의 데이터를 제외하고 자바 직렬화를 사용을 지양하는 것이 좋다.
+- **자주 변경되는 비즈니스적인 데이터는 자바 직렬화를 사용하지 않는 것**이 권장되고, 외부 저장소로 저장되는 데이터(e.g. Redis)는 짧은 만료시간의 데이터를 제외하고 자바 직렬화를 사용을 지양하는 것이 좋다.
     - 긴 만료 시간을 가지는 데이터는 JSON 등 다른 포맷을 사용하여 저장하는 것이 권장된다.
     - 자바에서 Object를 XML, JSON과 같은 포맷을 이용한 직렬화는 다른 환경, 다른 언어로 만들어진 어플리케이션과도 통신이 가능하다.
 
