@@ -142,14 +142,14 @@ user@naver.com
 DB에 해당 `name`을 가진 `User`가 있든 없든 `createUserWithName()` 이 무조건 호출되기 때문에 중복된 `name` 인 경우 DB에 save 할 때 오류가 발생한다.
 
 ```java
-public User findByUsername(String name) {
-    return userRepository.findByName(name)
-                    .orElse(createUserWithName(name));
+public User findByName(String name) {
+		return userRepository.findByName(name)
+                            .orElse(createUserWithName(name));
 }
 
 private User createUserWithName(String name) {
-    User user = new User(name);
-    return userRepository.save(user);
+		User user = new User(name);
+		return userRepository.save(user);
 }
 ```
 
@@ -158,14 +158,14 @@ private User createUserWithName(String name) {
 DB에 해당 `name`을 가진 `User`가 있는 경우에는 조회된 `User` 객체를 반환하고 없는 경우에는  `createUserWithName()` 가 호출되어 새로 생성된 `User` 객체를 반환한다.
 
 ```java
-public User findByUsername(String name) {
-    return userRepository.findByName(name)
-                    .orElseGet(createUserWithName(name));
+public User findByName(String name) {
+		return userRepository.findByName(name)
+                            .orElseGet(() -> createUserWithName(name));
 }
 
 private User createUserWithName(String name) {
-    User user = new User(name);
-    return userRepository.save(user);
+		User user = new User(name);
+		return userRepository.save(user);
 }
 ```
 
@@ -225,6 +225,35 @@ private User createUserWithName(String name) {
 - [자바 객체의 직렬화(Serializable, serialVersionUID)*](https://ktko.tistory.com/entry/JAVA-%EA%B0%9D%EC%B2%B4%EC%9D%98-%EC%A7%81%EB%A0%AC%ED%99%94Serializable-serialVersionUID)
 
 # https://github.com/WeeklyStudy/modern-java-in-action/issues/28 Optional의 장단점은 무엇일까?
+
+## 💡자바 8 이전
+
+### 1. 메서드가 특정 조건에서 값을 반환할 수 없을 때
+
+자바 8 이전에는 메서드가 특정 조건에서 값을 반환할 수 없을 때 2가지 선택지가 있었다.
+
+1. exception throw(예외 던지기)
+    - 예외는 반드시 예외적인 상황에서만 사용해야 한다.
+    - 예외는 실행 스택을 추적 캡처하기 때문에 비용이 비싸다.
+2. null return(널 반환)
+    - null을 반환하라 수 있는 메서드를 사용하는 곳에서 null 체크 로직을 추가해야 한다.
+
+## 💡자바 8 이후
+
+### 1. 메서드가 특정 조건에서 값을 반환할 수 없을 때
+
+자바 8 이후에 `Optional<T>` 이 등장하면서 선택지 1개가 추가되었다.
+
+3. 빈 Optional 반환
+    - null 대신 `Optional.empty()` 를 리턴한다.
+
+### 2. Optional
+
+> null이 아닌 T타입 참조를 하나 담거나 아무것도 담지 않은 일종의 Wrapper 클래스다.
+> 
+- `Optional` 은 원소를 최대 1개 가질 수 있는 `불변 Collection`이다.
+- `Optional을 반환하는 메서드`는 `예외를 던지는 메서드`보다 유연하고 사용하기 쉽다.
+- `Optional을 반환하는 메서드`는 `null을 반환하는 메서드`보다 오류 가능성이 작다.
     
 ## 💡Optional의 장단점
 
