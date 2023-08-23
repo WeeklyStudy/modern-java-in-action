@@ -19,22 +19,26 @@
 > - DST은 자연 일광을 보다 잘 활용하기 위해서 여름철에 표준 시간에서 1시간 앞으로, 그리고 다시 가을에 시간을 1시간 전으로 설정하는 것을 말한다.
 > - DST와 "summer time"은 같은 말을 뜻하며 특정 나라에서 주로 불린다.
 > - 영국에서 썸머타임이라고 많이 사용하며, DST가 적용되지 않는 표준시는 "winter time"이라고 사용되기도 한다.
-> - DST를 독일에서는 "sommerzeit", 스칸디나비아에서는 "sommertid"라고도 사용한다.
 
 ### 2. ZonedDateTime vs OffsetDateTime
 
 - `ZonedDateTime` , `OffsetDateTime`는 공통적으로 나노초 단위의 타임라인 상의 인스턴트를 저장한다.
-- 하지만, `OffsetDateTime`은 `LocalDateTime`+`ZoneOffset`가 결합된 클래스이고, `ZonedDateTime` 은 `LocalDateTime` + `ZoneId`가 결합된 클래스이다.
+- 하지만, `OffsetDateTime`은 `LocalDateTime`+`ZoneOffset`이 결합된 클래스이고, `ZonedDateTime` 은 `LocalDateTime` + `ZoneId`가 결합된 클래스이다.
 - 즉, `OffsetDateTime`과 달리, `ZonedDateTime` 은 일광 절약 시간(DST) 조정 및 기타 이상 현상을 다루는 규칙을 포함한다.
     - 타임 존 = ( Offset-From-UTC + 이상 현상 규칙 )
     - DST에는 CET(겨울), CEST(여름) 형태가 있는데 Time Zone(CET)로 통일하고, Time Transition Rule을 가지는 `ZoneRules`를 통해 알아서 내부적으로 계산해준다.
-- 따라서 DST 등으로 인해 **고정된 시차**를 가지지 않는 도시를 대상으로 날짜 시간 객체를 만들 때는 `OffsetDateTime`보다는 **`ZonedDateTime`** 을 사용하는 편이 적합하다.
+- 따라서, DST 등으로 인해 **고정된 시차**를 가지지 않는 도시를 대상으로 날짜 시간 객체를 만들 때는 `OffsetDateTime`보다는 `ZonedDateTime` 을 사용하는 편이 적합하다.
     - 계절에 따라 변하는 시차를 알아서 처리해주기 때문입니다.
     - 예를 들어 벤쿠버의 경우 보통은 시차가 `-08:00`이지만 소위 Summer Time이라고 불리는 일괄절약타임을 시행하기 때문에 여름에는 한 시간 더 일찍 시간이 간다.
-- 하지만, [공식 API 문서](https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html)에 따르면, **데이터베이스**나 **네트워크**와 **통신**할 때는 **`OffsetDateTime`** 사용이 권장된다.
-   - local time offsets을 포함한 날짜는 언제나 동일한 시간 순간을 나타내며 따라서 안정된 순서를 가지는 반면, full timezone 정보를 포함한 날짜는 해당 시간대의 규칙이 조정에도 불구하고 불안정한 의미를 갖는다.
-   - ZonedDateTime을 저장하고 검색할 경우, 저장된 computed offset과 검색된 객체의 offset이 zone-id의 현재 규칙과 일치하지 않는 문제가 발생할 수 있기 때문이다.
-   - 따라서 내부적으로 계산되는 시간대(`ZoneId`) 규칙의 변동성을 배제하고 타임스탬프를 통신하고자 할 때는 OffsetDateTime이 권장된다.
+- 하지만, [공식 API 문서](https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html)에 따르면, **데이터베이스**나 **네트워크**와 **통신**할 때는 `OffsetDateTime` 사용이 권장된다.
+   - local time offsets을 포함한 `OffsetDateTime`는 언제나 동일한 시간 순간을 나타내지만, 시간대(zone-id) 변경이나 규칙 조정과 관련된 정보가 없어서 안정된 순서를 가진다.
+   - 반면, full timezone 정보를 포함한 `ZonedDateTime`는 해당 시간대의 규칙이 조정되더라도 해당 변화를 반영할 수 있어서 불안정한 의미를 가질 수 있기 때문이다.
+   - 예를 들어, `ZonedDateTime`을 저장하고 검색할 경우, 저장된 computed offset과 검색된 객체의 offset이 zone-id의 현재 규칙과 일치하지 않는 문제가 발생할 수 있다.
+### 3. 결론
+- **사용자와 상호작용하거나 메시지를 표시할 때**, 그리고 **사용자의 시간대 정보를 고려해야 할 때**는 `ZonedDateTime을` 사용한다.
+  - 이는 특정 시간을 특정 지역의 시간대로 표현하고 다룰 수 있게 해주기 때문이다.
+- 반면, **시간 이벤트를 데이터베이스에 저장**하거나 **시간의 절대적인 순서를 중요하게 다룰 때**는 `OffsetDateTime`을 사용한다.
+  - 이는 시간 정보를 특정 지역 시간대로 변환하지 않고 영향을 받지 않는 순수한 시간 차이를 표현하기 때문이다.
 
 
 ### References
@@ -43,7 +47,7 @@
 - [[Java8 Time API] ZonedDateTime 사용법](https://www.daleseo.com/java8-zoned-date-time/)
 - [Java 8 ZonedDateTime vs OffsetDateTime 어떤 상황에서 쓰는게 적합한가?](https://sujl95.tistory.com/86)
 - [ZonedDateTime과 OffsetDateTime의 차이점](https://howtodoinjava.com/java/date-time/zoneddatetime-vs-offsetdatetime/)
-- [What's the difference between ZonedDateTime and OffsetDateTime?](https://stackoverflow.com/questions/30234594/whats-the-difference-between-zoneddatetime-and-offsetdatetime)
+- [[StackOverFlow] What's the difference between ZonedDateTime and OffsetDateTime? *](https://stackoverflow.com/questions/30234594/whats-the-difference-between-zoneddatetime-and-offsetdatetime)
 - [Java8+ Instant vs LocalDateTime 각 사용방법](https://velog.io/@lsb156/Instant-vs-LocalDateTime)
 
 ## Q2. **Java 8의 Instant vs LocalDateTime**
@@ -73,7 +77,7 @@
 
 - 특징
     - Java Time에서 `Local`이 들어간다는것은 시간대(Zone Offset/Zone Region)에 대한 정보가 없다는 의미다.
-    - 따라서, LocalDateTime은 ****로컬 pc의 날짜와 시간을 반환한다.
+    - 따라서, LocalDateTime은 로컬 pc의 날짜와 시간을 반환한다.
     
     ```java
     // 로컬 시간을 의미하는 ISO 8601 문자열
