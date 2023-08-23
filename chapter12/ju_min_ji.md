@@ -21,18 +21,21 @@
 > - 영국에서 썸머타임이라고 많이 사용하며, DST가 적용되지 않는 표준시는 "winter time"이라고 사용되기도 한다.
 > - DST를 독일에서는 "sommerzeit", 스칸디나비아에서는 "sommertid"라고도 사용한다.
 
-### 2. **ZonedDateTime(**ZoneId**) vs OffsetDateTime(**ZoneOffset**)**
+### 2. ZonedDateTime vs OffsetDateTime
 
-- `ZonedDateTime` , `OffsetDateTime`는 모두 나노초 단위의 타임라인 상의 인스턴트를 저장한다.
-- `OffsetDateTime`은 ****`LocalDateTime` + `ZoneOffset` 을 결합하고, `ZonedDateTime` 은 `LocalDateTime` +  `ZoneId` 클래스를 결합한다.
+- `ZonedDateTime` , `OffsetDateTime`는 공통적으로 나노초 단위의 타임라인 상의 인스턴트를 저장한다.
+- 하지만, `OffsetDateTime`은 `LocalDateTime`+`ZoneOffset`가 결합된 클래스이고, `ZonedDateTime` 은 `LocalDateTime` + `ZoneId`가 결합된 클래스이다.
 - 즉, `OffsetDateTime`과 달리, `ZonedDateTime` 은 일광 절약 시간(DST) 조정 및 기타 이상 현상을 다루는 규칙을 포함한다.
     - 타임 존 = ( Offset-From-UTC + 이상 현상 규칙 )
     - DST에는 CET(겨울), CEST(여름) 형태가 있는데 Time Zone(CET)로 통일하고, Time Transition Rule을 가지는 `ZoneRules`를 통해 알아서 내부적으로 계산해준다.
-- 따라서 DST 등으로 인해 **고정된 시차**를 가지지 않는 도시를 대상으로 날짜 시간 객체를 만들 때는 `OffsetDateTime`보다는 `**ZonedDateTime**`를 사용하는 편이 적합하다.
+- 따라서 DST 등으로 인해 **고정된 시차**를 가지지 않는 도시를 대상으로 날짜 시간 객체를 만들 때는 `OffsetDateTime`보다는 **`ZonedDateTime`** 을 사용하는 편이 적합하다.
     - 계절에 따라 변하는 시차를 알아서 처리해주기 때문입니다.
     - 예를 들어 벤쿠버의 경우 보통은 시차가 `-08:00`이지만 소위 Summer Time이라고 불리는 일괄절약타임을 시행하기 때문에 여름에는 한 시간 더 일찍 시간이 간다.
-- 하지만, **데이터베이스**에 타임스탬프를 유지하거나 **네트워크를 통신**할 때 시간대에 관계없이 범용 타임라인에 고유한 순간을 저장하려면 `**OffsetDateTime**` 사용이 권장된다.
-    - 시간대(`ZoneId`) 규칙의 변동성을 고려하지 않고 특정 오프셋을 통해 타임스탬프를 관리할 수 있기 때문이다.
+- 하지만, [공식 API 문서](https://docs.oracle.com/javase/8/docs/api/java/time/OffsetDateTime.html)에 따르면, **데이터베이스**나 **네트워크**와 **통신**할 때는 **`OffsetDateTime`** 사용이 권장된다.
+   - local time offsets을 포함한 날짜는 언제나 동일한 시간 순간을 나타내며 따라서 안정된 순서를 가지는 반면, full timezone 정보를 포함한 날짜는 해당 시간대의 규칙이 조정에도 불구하고 불안정한 의미를 갖는다.
+   - ZonedDateTime을 저장하고 검색할 경우, 저장된 computed offset과 검색된 객체의 offset이 zone-id의 현재 규칙과 일치하지 않는 문제가 발생할 수 있기 때문이다.
+   - 따라서 내부적으로 계산되는 시간대(`ZoneId`) 규칙의 변동성을 배제하고 타임스탬프를 통신하고자 할 때는 OffsetDateTime이 권장된다.
+
 
 ### References
 
