@@ -48,12 +48,29 @@
     - 이전: 인터페이스 내부에 `static 메서드`를 구현할 수 없었기 때문에 `유틸리티 클래스`를 만들어 사용했다.
     - 이후: 인터페이스 내부에 `static 메서드` 로 `유틸리티 메서드`를 구현한다.
 
+> 📍**Helper Class vs Utility Class**
+> 
+> 
+> Utility 클래스와 Helper 클래스 어플리케이션의 핵심 로직인 아닌 특정 클래스의 작업을 도와주는 역할을 하는 클래스다. Helper 클래스가 Utility 클래스보다 더 큰 개념이다.
+> 
+> 1. Helper Class
+>     - 인스턴스화할 수 있다.
+>     - 모든 메소드가 static 메소드인 것은 아니다.
+>     - 인스턴스 변수, 인스턴스 및 정적 메서드를 가질 수 있다.
+>     - 주로 default 접근 제어자로 같은 패키지 내에서 사용할 수 있다.
+> 2. Utility Class
+>     - private 생성자를 가지기 때문에 인스턴스화할 수 없다.
+>     - 정적 변수와 정적 메서드만 가질 수 있다.
+>     - 주로 public 접근 제어자로 전역에서 사용할 수 있다.
+>     - *e.g. java.util.Arrays , java.lang.Math , java.util.Scanner , java.util.Collections*
+
 ## Reference
 
 - [자바8이후 인터페이스의 변경점 2가지와 변경한 이유(default method, static method)](https://jeong-pro.tistory.com/209)
 - [인터페이스(Interface) 문법 & 활용 - 완벽 가이드](https://inpa.tistory.com/entry/JAVA-%E2%98%95-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4Interface%EC%9D%98-%EC%A0%95%EC%84%9D-%ED%83%84%ED%83%84%ED%95%98%EA%B2%8C-%EA%B0%9C%EB%85%90-%EC%A0%95%EB%A6%AC)
 - [Java 8의 주요 변경 사항과 실무 적용 포인트](https://bbubbush.tistory.com/23)
 - [[Java] 자바 8 인터페이스의 Default 메소드와 Static 메소드](https://veneas.tistory.com/entry/Java-%EC%9E%90%EB%B0%94-8-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%EC%9D%98-Default-%EB%A9%94%EC%86%8C%EB%93%9C%EC%99%80-Static-%EB%A9%94%EC%86%8C%EB%93%9C)
+- [Java Helper vs. Utility Classes](https://www.baeldung.com/java-helper-vs-utility-classes)
 
 # https://github.com/WeeklyStudy/modern-java-in-action/issues/34 자바에서 다중 상속을 허용하지 않는 이유는 무엇일까?
 
