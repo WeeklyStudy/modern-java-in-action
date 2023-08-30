@@ -61,7 +61,7 @@
 
 ### 7. **인터페이스의 인스턴스화 불가능**
 
-- 인터페이스는 추상적인 개념을 나타내는 것이기 때문에 **`new MyInterface()`**와 같은 방식으로 직접적으로 인스턴스화할 수 없다.
+- 인터페이스는 추상적인 개념을 나타내는 것이기 때문에 `new MyInterface()`와 같은 방식으로 직접적으로 인스턴스화할 수 없다.
 - 인터페이스를 구현하는 클래스를 통해 해당 인터페이스의 객체를 생성해야 한다.
 
 ### 8. 인터페이스 형태의 배열
@@ -104,7 +104,13 @@
 - 객체를 클래스가 아닌 인터페이스로 참조하면, 구현 타입이 변경되도 유연하게 대처할 수 있기 때문이다.
 - 즉, 인터페이스를 참조하여 만든 객체는 구현타입이 변하더라도 인터페이스에 있는 메서드를 그대로 사용할 수 있다.
 - 만일 적한한 인터페이스가 없다면 클래스의 계층구조 중 필요한 기능을 만족하는 가장 덜 구체적인(상위의) 클래스를 타입으로 사용하는 것이 권장된다.
+<img src="https://github.com/WeeklyStudy/modern-java-in-action/assets/63441091/b950513b-f426-4f76-96c0-fcb058aee7fe" width="650">
 
+```java
+public class LinkedHashSet<E>
+    extends HashSet<E>
+    implements Set<E>, Cloneable, java.io.Serializable {
+```
 ```java
 //좋은 예 
 Set<String> set = new LinkedHashSet<>();
@@ -113,8 +119,8 @@ Set<String> set = new LinkedHashSet<>();
 LinkedHashSet<String> set = new LinkedHashSet<>();
 ```
 
-- 하지만 주의점이 있다. 업캐스팅을 사용하게되면 상위 인터페이스에 있는 구현체를 사용할 수 있지만 LinkedHashSet만이 가진 메서드를 사용할 순 없기 때문에 클래스에서만 정의된 메서드를 사용하고자 할 때 문제가 될 수 있다.
-- 예를 들어, LinkedHashSet과 달리 HashSet은 반복자의 순회 순서를 보장하지 않기 떄문에 로직상 문제가 될 수 있다.
+- 하지만 주의점이 있다. 업캐스팅을 사용하게되면 상위 인터페이스의 구현체(HashSet, LinkedHashSet)를 사용할 수 있지만 LinkedHashSet이 가지고 있는 추가적인 메서드나 기능은 Set 인터페이스의 범위를 벗어나므로, Set으로 업캐스팅한 경우에는 이러한 추가적인 기능에 접근할 수 없다.
+- 예를 들어 LinkedHashSet을 HashSet으로 변환하면, LinkedHashSet과 달리 HashSet은 반복자의 순회 순서를 보장하지 않기 떄문에 나중에 로직상 문제가 생길 수도 있다.
 
 ### References
 
@@ -125,13 +131,14 @@ LinkedHashSet<String> set = new LinkedHashSet<>();
 - [아이템56 공개된 API 요소에는 항상 문서화 주석을 작성하라](https://incheol-jung.gitbook.io/docs/study/effective-java/undefined-6/56-api)
 - [[자바]인터페이스 주의사항](http://m.blog.naver.com/skykingkjs/150144018727)
 - [[이펙티브 자바] 객체는 인터페이스를 사용해 참조하라](https://jgrammer.tistory.com/entry/%EC%9D%B4%ED%8E%99%ED%8B%B0%EB%B8%8C-%EC%9E%90%EB%B0%94-%EA%B0%9D%EC%B2%B4%EB%8A%94-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4-%EC%B0%B8%EC%A1%B0%ED%95%98%EB%9D%BC)
+- [How to Learn Java Collections – A Complete Guide](https://www.geeksforgeeks.org/how-to-learn-java-collections-a-complete-guide/)
 
 ## Q2. **자바8에 도입된 인터페이스의 default 메서드와 static 메서드**
 
 ### 1. **default 메서드**
 
 - 개념 및 도입 배경
-    - **인터페이스**에 **새로운 메서드**가 **추가**되어도**,** 구현 클래스를 수정하지 않고 깔끔하게 **하위 호환**하기 위해 **인터페이스 내부에서** **기본 구현**을 제공하는 디폴트 메서드가 도입되었다.
+    - **인터페이스**에 **새로운 메서드**가 **추가**되어도, 구현 클래스를 수정하지 않고 깔끔하게 **하위 호환**하기 위해 **인터페이스 내부에서** **기본 구현**을 제공하는 디폴트 메서드가 도입되었다.
 - 특징
     - **public** 메서드
         - 기본 메서드를 포함하여 인터페이스의 모든 메서드 선언은 암시적으로 public이다.
@@ -194,22 +201,37 @@ LinkedHashSet<String> set = new LinkedHashSet<>();
 - 다중 상속의 가장 대표적인 문제로 꼽히는 문제는 다이아몬드 문제(Diamond Problem)**다.**
 - **부모 요소 중** **같은** **Method Signature(메서드 이름 + 파라미터 리스트)를 가지는 메서드가 있을 때, 어떤 부모의 메서드를 호출해야할지 모호해지는 문제가 발생한다.**
 
-### 2. 객체지향 원칙 위배
+### 2. 인터페이스의 다중 상속
+- Java8 이전에도 인터페이스는 다중 상속이 가능했다.
+- 메서드의 기능에 대해 선언만 해두기 때문에(추상 메서드) 충돌할 여지가 없었기 때문이다.
+  ```java
+    interface Movable {
+  	/** 지정된 위치(x, y)로 이동하는 기능의 메서드*/
+  	void move(int x, int y); // public abstract 생략
+  }
 
-- 클래스들을 다중 상속 하게 되면 클래스의 성질이 복합적으로 섞여 부모와 **IS-A 관계**가 모호해져 정체성이 불분명해진다.
-- 이에 여러가지 객체지향 원칙에 위배될 수 있다.
+  interface Attackable {
+	  /** 지정된 대상(u)을 공격하는 기능의 메서드 */
+	  void attack(Unit u);
+  }
 
-### 3. 인터페이스의 다중상속 - 디폴트 메서드
+  interface Fightable extends Movable, Attackable {} // 멤버 2개 
+  ```
+
+### 3. 동작 다중상속 - 디폴트 메서드
 
 - 현재 Java에서 클래스 간의 다중 상속을 시도하면 컴파일 타임에 오류가 발생한다.
-- 하지만, Java8 이후 인터페이스 내부에 디폴트 메서드가 선언가능해지면서 동작 다중 상속이 가능해졌다.
-- 이로 인해서도 다이아몬드 문제가 발생할 수 있다.
-- 디폴트 메서드를 구현한 인터페이스 A를 extends한 서브 인터페이스 B, C를 클래스 D가 상속받는다면,  B나 C가 기본적으로 상속받은 디폴트 메서드는 클래스 D에서도 호출가능하고, 충돌이 일어나지 않는다.
+- 하지만, Java8 이후 인터페이스 내부에 디폴트 메서드가 선언가능해지면서 동작 다중 상속(구현체의 다중 상속)도 가능해졌다.
+- 만약 기능이 중복될 경우, 클래스의 디폴트 메서드가 우선권을 갖고, 그 다음에는 서브 인터페이스의 디폴트 메서드가 우선권을 갖는다.
+- 디폴트 메서드를 구현한 인터페이스 A를 extends한 서브 인터페이스 B, C를 클래스 D가 상속받는다면,  B나 C가 그대로 상속받은 디폴트 메서드는 클래스 D에서도 호출가능하고, 충돌이 일어나지 않는다.
+   - 인터페이스 A로부터 서브 인터페이스 B,C가 그대로 상속받은 디폴트 메서드는 구현부가 같기 때문에 문제 여지가 없다.
 - 하지만, 위 상황에서 B나 C 인터페이스에서 디폴트 메서드를 오버라이드한 인터페이스가 있다면, 결국 (서브 인터페이스에서 상속한) 디폴트 메서드 vs (서브인터페이스에서 구현한)가 충돌하는 구조가 되어버린다.
-- 따라서, 클래스 D가 어떤 메서드를 사용할지 명시적으로 오버라이드하여 문제를 해결해야 한다.
+- 따라서, 위와 같이 동등한 우선권을 지닌 디폴트 메서드가 충돌할 경우에는 클래스 D가 어떤 메서드를 사용할지 **명시적으로 오버라이드**하여 문제를 해결해야 한다.
 
 ### References
 
 - [자바와 다중상속 문제 - 피자먹는 개발자](https://castlejune.tistory.com/30)
 - [자바에서 클래스 다중상속을 막은 이유](https://gyubgyub.tistory.com/102)
 - [[Java] 자바8에 도입된 인터페이스의 디폴트 메서드 (Default Method)](https://loosie.tistory.com/712)
+- [Java] 자바의 다중상속 (feat. 인터페이스와 추상클래스)
+- [자바의 정석 ch7.7 인터페이스(interface)](https://velog.io/@balparang/%EC%A0%95%EC%84%9D-ch7.7-%EC%9D%B8%ED%84%B0%ED%8E%98%EC%9D%B4%EC%8A%A4interface)
