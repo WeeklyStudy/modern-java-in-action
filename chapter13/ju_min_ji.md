@@ -119,8 +119,8 @@ Set<String> set = new LinkedHashSet<>();
 LinkedHashSet<String> set = new LinkedHashSet<>();
 ```
 
-- 하지만 주의점이 있다. 업캐스팅을 사용하게되면 상위 인터페이스의 구현체(HashSet, LinkedHashSet)를 사용할 수 있지만 LinkedHashSet이 가지고 있는 추가적인 메서드나 기능은 Set 인터페이스의 범위를 벗어나므로, Set으로 업캐스팅한 경우에는 이러한 추가적인 기능에 접근할 수 없다.
-- 예를 들어 LinkedHashSet을 HashSet으로 변환하면, LinkedHashSet과 달리 HashSet은 반복자의 순회 순서를 보장하지 않기 떄문에 나중에 로직상 문제가 생길 수도 있다.
+- 하지만 주의점이 있다. 업캐스팅을 사용하게되면 상위 인터페이스의 구현체(HashSet, LinkedHashSet)를 사용할 수 있지만 LinkedHashSet이 가지고 있는 추가적인 메서드나 기능은 Set 인터페이스의 범위를 벗어나므로, **Set으로 업캐스팅한 경우에는 이러한 추가적인 기능에 접근할 수 없다.**
+
 
 ### References
 
